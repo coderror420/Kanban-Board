@@ -6,11 +6,6 @@ A modern, responsive **Kanban Board** built with **React**, **TypeScript**, **Ta
 
 ## Live Storybook
 
-🔗 [View Deployed Storybook](https://your-storybook-url.com)  
-_(Replace this link with your actual deployed Storybook URL)_
-
----
-
 ## Features
 
 - **Drag-and-drop tasks** between columns  
@@ -44,13 +39,15 @@ src/
  │         ├── KanbanCard.tsx           # Individual task card component
  │         ├── KanbanColumn.tsx         # Column container
  │         ├── KanbanBoard.stories.tsx  # Storybook stories (CSF format)
+ │         ├── TaskModal.tsx
+ │         ├── KanbanBoard.types.ts 
  │         └── kanbanOverview.docs.mdx  # Storybook Docs page
  │
  ├── styles/
- │    └── index.css                     # Tailwind CSS imports
+ │    └── global.css                     # Tailwind CSS imports
  │
  ├── utils/
- │    └── dragUtils.ts                  # Helper for drag-and-drop logic
- │
+ │    ├── useDragAndDrop.tsx                  # Helper for drag-and-drop logic
+ │    └── useKanbanBoard.tsx
  └── main.tsx / App.tsx                 # App entry points
 ```
