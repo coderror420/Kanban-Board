@@ -1,25 +1,37 @@
-import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';
-import { KanbanBoard } from './KanbanBoard';
-import * as KanbanBoardStories from './KanbanBoard.stories';
+import { Meta, Canvas, Story, Description } from "@storybook/blocks";
+import * as KanbanBoardStories from "./KanbanBoard.stories";
 
-<Meta title="Components/KanbanBoard/Overview" component={KanbanBoard} />
+<Meta of={KanbanBoardStories} />
 
-# 🧭 Kanban Board Overview
+# Kanban Board Overview
 
-A visual and interactive Kanban system for managing tasks by columns and priorities.
+The **Kanban Board** component helps organize and visualize project tasks across
+different workflow stages like **To Do**, **In Progress**, and **Done**.
 
 ---
 
-## 📋 Example
+## Preview
+
+<Canvas of={KanbanBoardStories.Default} />
+
+---
+
+## Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `tasks` | `KanbanTask[]` | Tasks to display in board columns |
+| `columns` | `string[]` | Column names for board |
+| `onTaskMove` | `(id: string, status: string) => void` | Called when a task moves |
+
+---
+
+## Example Story
 
 <Canvas>
-  <Story name="Default" args={KanbanBoardStories.Default.args}>
-    <KanbanBoard {...KanbanBoardStories.Default.args} />
-  </Story>
+  <Story of={KanbanBoardStories.WithInitialTasks} />
 </Canvas>
 
 ---
 
-## ⚙️ Props
-
-<ArgsTable of={KanbanBoard} />
+_Built with **React + Vite 5 + Storybook 8**_

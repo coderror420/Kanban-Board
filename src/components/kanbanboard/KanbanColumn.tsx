@@ -29,7 +29,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
     <div
       className="flex flex-col w-80 bg-gray-50 rounded-lg shadow h-[80vh] overflow-hidden"
       onDragOver={(e) => {
-        e.preventDefault(); // ✅ Prevent default to allow drop
+        e.preventDefault(); // Prevent default to allow drop
         onDragOver(e);
       }}
       onDrop={(e) => onDrop(e, column.id)}

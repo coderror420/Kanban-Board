@@ -13,12 +13,12 @@
   "author": "Kanishka Pandey",
   "license": "ISC",
   "dependencies": {
+    "@storybook/addon-interactions": "^8.6.14",
     "@tailwindcss/vite": "^4.1.16",
     "babel": "^6.23.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router": "^7.9.5",
-    "tailwindcss": "^4.1.16",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
@@ -26,9 +26,12 @@
     "@storybook/addon-docs": "^8.4.7",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-onboarding": "^8.4.7",
-    "@storybook/react-vite": "^8.4.7",
-    "@vitejs/plugin-react": "^5.1.0",
+    "@storybook/blocks": "^8.6.14",
+    "@storybook/react-vite": "^8.6.14",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
     "storybook": "^8.4.7",
-    "vite": "^7.1.12"
+    "tailwindcss": "^3.4.7",
+    "vite": "^5.2.11"
   }
 }

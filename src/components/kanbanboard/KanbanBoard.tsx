@@ -19,20 +19,20 @@ export const KanbanBoard: React.FC<KanbanViewProps> = ({
   const { handleDragStartWithColumn, handleDrop, handleDragOver } =
     useDragAndDrop({ onTaskMove });
 
-  // 🧠 Open empty modal to add new task
+  // Open empty modal to add new task
   const handleAddTask = (columnId: string) => {
     setSelectedColumn(columnId);
     setSelectedTask(null);
     setIsModalOpen(true);
   };
 
-  // 🧠 Open modal for editing an existing task
+  // Open modal for editing an existing task
   const handleTaskClick = (task: KanbanTask) => {
     setSelectedTask(task);
     setIsModalOpen(true);
   };
 
-  // 💾 Save or Update
+  //  Save or Update
   const handleSaveTask = (task: KanbanTask) => {
     if (selectedTask) {
       onTaskUpdate?.(selectedTask.id, task);
@@ -42,7 +42,7 @@ export const KanbanBoard: React.FC<KanbanViewProps> = ({
     setIsModalOpen(false);
   };
 
-  // ❌ Delete
+  //  Delete
   const handleDeleteTask = () => {
     if (selectedTask) {
       onTaskDelete?.(selectedTask.id);
@@ -65,7 +65,7 @@ export const KanbanBoard: React.FC<KanbanViewProps> = ({
         />
       ))}
 
-      {/* 🪟 Modal for both Add / Edit / Delete */}
+      {/* Modal for both Add / Edit / Delete */}
       <TaskModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

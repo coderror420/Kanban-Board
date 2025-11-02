@@ -3,8 +3,8 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./.storybook/**/*.{js,jsx,ts,tsx}", // 👈 include storybook stories
-    "./style/**/*.{css,scss}", // 👈 include your global.css
+    "./.storybook/**/*.{js,jsx,ts,tsx}",
+    "./style/**/*.{css,scss}", 
   ],
   theme: {
     extend: {

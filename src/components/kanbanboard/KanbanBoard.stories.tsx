@@ -8,7 +8,7 @@ export default {
   component: KanbanBoard,
 } as Meta<typeof KanbanBoard>;
 
-// 🧩 Sample data
+//Sample data
 const sampleTasks: Record<string, KanbanTask> = {
   "task-1": {
     id: "task-1",
@@ -46,7 +46,7 @@ export const Default: StoryFn = () => {
   const [columns, setColumns] = useState<KanbanColumn[]>(sampleColumns);
   const [tasks, setTasks] = useState<Record<string, KanbanTask>>(sampleTasks);
 
-  /** 🧭 Move a task between columns */
+  /**Move a task between columns */
   const handleTaskMove = (
     taskId: string,
     fromColumn: string,
@@ -72,7 +72,7 @@ export const Default: StoryFn = () => {
     }));
   };
 
-  /** ➕ Create a new task */
+  /** Create a new task */
   const handleTaskCreate = (
     columnId: string,
     task: Omit<KanbanTask, "id" | "createdAt" | "status">
@@ -93,7 +93,7 @@ export const Default: StoryFn = () => {
     );
   };
 
-  /** ✏️ Update task details */
+  /** Update task details */
   const handleTaskUpdate = (taskId: string, updates: Partial<KanbanTask>) => {
     setTasks((prev) => {
       const task = prev[taskId];
@@ -102,7 +102,7 @@ export const Default: StoryFn = () => {
     });
   };
 
-  /** ❌ Delete a task */
+  /** Delete a task */
   const handleTaskDelete = (taskId: string) => {
     // Remove task from tasks list
     setTasks((prev) => {
@@ -127,7 +127,7 @@ export const Default: StoryFn = () => {
       onTaskMove={handleTaskMove}
       onTaskCreate={handleTaskCreate}
       onTaskUpdate={handleTaskUpdate}
-      onTaskDelete={handleTaskDelete} // ✅ Pass delete handler here
+      onTaskDelete={handleTaskDelete} // Pass delete handler here
     />
   );
 };
