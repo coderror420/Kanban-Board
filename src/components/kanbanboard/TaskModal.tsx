@@ -1,71 +1,120 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { KanbanTask } from "./KanbanBoard.types";
 
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (task: KanbanTask) => void;
-  defaultTask?: KanbanTask;
+  onDelete?: () => void;
+  task?: KanbanTask | null;
 }
 
 const TaskModal: React.FC<TaskModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  defaultTask,
+  onDelete,
+  task,
 }) => {
-  const [title, setTitle] = useState(defaultTask?.title || "");
-  const [description, setDescription] = useState(defaultTask?.description || "");
+  const [formData, setFormData] = useState<KanbanTask>({
+    id: "",
+    title: "",
+    description: "",
+    priority: "low",
+    status: "todo",
+    createdAt: new Date(),
+  });
+
+  useEffect(() => {
+    if (task) setFormData(task);
+    else
+      setFormData({
+        id: "",
+        title: "",
+        description: "",
+        priority: "low",
+        status: "todo",
+        createdAt: new Date(),
+      });
+  }, [task]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    if (formData.title.trim()) {
+      onSave(formData);
+      onClose();
+    }
+  };
 
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
-    if (!title.trim()) return alert("Title is required");
-
-    const newTask: KanbanTask = {
-      id: defaultTask?.id || Date.now().toString(),
-      title,
-      description,
-      status: defaultTask?.status || "todo",
-      createdAt: defaultTask?.createdAt || new Date(),
-    };
-    onSave(newTask);
-    onClose();
-  };
-
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-semibold mb-4">
-          {defaultTask ? "Edit Task" : "Add New Task"}
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-2xl w-96 shadow-xl">
+        <h2 className="text-xl font-bold mb-4">
+          {task ? "Edit Task" : "Add Task"}
         </h2>
 
         <input
+          type="text"
+          name="title"
+          placeholder="Task title *"
+          value={formData.title}
+          onChange={handleChange}
           className="w-full border p-2 rounded mb-3"
-          placeholder="Task title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea
-          className="w-full border p-2 rounded mb-3"
-          placeholder="Description (optional)"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          required
         />
 
-        <div className="flex justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Save
-          </button>
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={formData.description || ""}
+          onChange={handleChange}
+          className="w-full border p-2 rounded mb-3"
+        />
+
+        <select
+          name="priority"
+          value={formData.priority}
+          onChange={handleChange}
+          className="w-full border p-2 rounded mb-4"
+        >
+          <option value="urgent">Urgent</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+
+        <div className="flex justify-between items-center mt-4">
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+          )}
+
+          <div className="flex gap-2 ml-auto">
+            <button
+              onClick={onClose}
+              className="bg-gray-300 text-gray-800 px-3 py-2 rounded hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600"
+            >
+              {task ? "Update" : "Save"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

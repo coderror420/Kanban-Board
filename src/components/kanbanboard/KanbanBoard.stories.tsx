@@ -1,88 +1,133 @@
-import React from "react";
-import {KanbanBoard} from "./KanbanBoard";
-import { KanbanTask } from "./KanbanBoard.types";
+import React, { useState } from "react";
+import { KanbanBoard } from "./KanbanBoard";
+import { KanbanColumn, KanbanTask } from "./KanbanBoard.types";
+import { Meta, StoryFn } from "@storybook/react";
 
-// ---- Sample Tasks ----
-const sampleTasks = {
+export default {
+  title: "Components/KanbanBoard",
+  component: KanbanBoard,
+} as Meta<typeof KanbanBoard>;
+
+// 🧩 Sample data
+const sampleTasks: Record<string, KanbanTask> = {
   "task-1": {
     id: "task-1",
     title: "Design homepage",
-    description: "Create mockups in Figma for the homepage layout",
+    description: "Create Figma mockups for homepage layout",
     status: "todo",
-    priority: "high" as "high",
+    priority: "high",
     createdAt: new Date(),
   },
   "task-2": {
     id: "task-2",
-    title: "API Integration",
+    title: "API integration",
     description: "Connect frontend with backend endpoints",
     status: "in-progress",
-    priority: "medium" as "medium",
+    priority: "medium",
     createdAt: new Date(),
   },
   "task-3": {
     id: "task-3",
     title: "Testing",
-    description: "Write unit tests for Kanban board",
+    description: "Write unit tests for task module",
     status: "done",
-    priority: "low" as "low",
+    priority: "low",
     createdAt: new Date(),
   },
 };
 
-// ---- Sample Columns ----
-const sampleColumns = [
-  {
-    id: "todo",
-    title: "To Do",
-    color: "#3B82F6",
-    taskIds: ["task-1"],
-  },
-  {
-    id: "in-progress",
-    title: "In Progress",
-    color: "#F59E0B",
-    taskIds: ["task-2"],
-  },
-    {
-    id: "done",
-    title: "Done",
-    color: "#10B981",
-    taskIds: ["task-3"],
-  },
+const sampleColumns: KanbanColumn[] = [
+  { id: "todo", title: "To Do", color: "#1E40AF", taskIds: ["task-1"] },
+  { id: "in-progress", title: "In Progress", color: "#D97706", taskIds: ["task-2"] },
+  { id: "done", title: "Done", color: "#15803D", taskIds: ["task-3"] },
 ];
 
-// ---- Handlers (for Storybook logging) ----
-const handleTaskMove = (taskId:string, from:string, to:string, index:number) => {
-  console.log(`Moved ${taskId} from ${from} → ${to} at position ${index}`);
-};
+export const Default: StoryFn = () => {
+  const [columns, setColumns] = useState<KanbanColumn[]>(sampleColumns);
+  const [tasks, setTasks] = useState<Record<string, KanbanTask>>(sampleTasks);
 
-const handleTaskCreate = (columnId:string, task:KanbanTask) => {
-  console.log(`Created task in ${columnId}:`, task);
-};
+  /** 🧭 Move a task between columns */
+  const handleTaskMove = (
+    taskId: string,
+    fromColumn: string,
+    toColumn: string,
+    newIndex: number
+  ) => {
+    setColumns((prevCols) => {
+      const updatedCols = prevCols.map((col) => ({ ...col }));
+      const fromCol = updatedCols.find((c) => c.id === fromColumn);
+      const toCol = updatedCols.find((c) => c.id === toColumn);
+      if (!fromCol || !toCol) return prevCols;
 
-const handleTaskUpdate = (taskId:string, updates: Partial<KanbanTask>) => {
-  console.log(`Updated ${taskId}:`, updates);
-};
+      fromCol.taskIds = fromCol.taskIds.filter((id) => id !== taskId);
+      const insertIndex = Math.min(newIndex, toCol.taskIds.length);
+      toCol.taskIds.splice(insertIndex, 0, taskId);
 
-const handleTaskDelete = (taskId: string) => {
-  console.log(`Deleted ${taskId}`);
-};
+      return updatedCols;
+    });
 
-// ---- Default Export ----
-export default {
-  title: "Components/KanbanBoard",
-  component: KanbanBoard,
-};
+    setTasks((prev) => ({
+      ...prev,
+      [taskId]: { ...prev[taskId], status: toColumn },
+    }));
+  };
 
-// ---- Main Story ----
-export const Default = () => (
-  <KanbanBoard
-    columns={sampleColumns}
-    tasks={sampleTasks}
-    onTaskMove={handleTaskMove}
-    onTaskCreate={handleTaskCreate}
-    onTaskUpdate={handleTaskUpdate}
-    onTaskDelete={handleTaskDelete}
-  />
-);
+  /** ➕ Create a new task */
+  const handleTaskCreate = (
+    columnId: string,
+    task: Omit<KanbanTask, "id" | "createdAt" | "status">
+  ) => {
+    const id = `task-${Date.now()}`;
+    const newTask: KanbanTask = {
+      ...task,
+      id,
+      status: columnId,
+      createdAt: new Date(),
+    };
+
+    setTasks((prev) => ({ ...prev, [id]: newTask }));
+    setColumns((prevCols) =>
+      prevCols.map((col) =>
+        col.id === columnId ? { ...col, taskIds: [...col.taskIds, id] } : col
+      )
+    );
+  };
+
+  /** ✏️ Update task details */
+  const handleTaskUpdate = (taskId: string, updates: Partial<KanbanTask>) => {
+    setTasks((prev) => {
+      const task = prev[taskId];
+      if (!task) return prev;
+      return { ...prev, [taskId]: { ...task, ...updates } };
+    });
+  };
+
+  /** ❌ Delete a task */
+  const handleTaskDelete = (taskId: string) => {
+    // Remove task from tasks list
+    setTasks((prev) => {
+      const updated = { ...prev };
+      delete updated[taskId];
+      return updated;
+    });
+
+    // Remove taskId from its column
+    setColumns((prevCols) =>
+      prevCols.map((col) => ({
+        ...col,
+        taskIds: col.taskIds.filter((id) => id !== taskId),
+      }))
+    );
+  };
+
+  return (
+    <KanbanBoard
+      columns={columns}
+      tasks={tasks}
+      onTaskMove={handleTaskMove}
+      onTaskCreate={handleTaskCreate}
+      onTaskUpdate={handleTaskUpdate}
+      onTaskDelete={handleTaskDelete} // ✅ Pass delete handler here
+    />
+  );
+};

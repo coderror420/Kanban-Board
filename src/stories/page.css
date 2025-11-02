@@ -22,7 +22,8 @@
 }
 
 .storybook-page a {
-  color: inherit;
+  color: #1ea7fd;
+  text-decoration: none;
 }
 
 .storybook-page ul {
@@ -41,7 +42,7 @@
   border-radius: 1em;
   background: #e7fdd8;
   padding: 4px 12px;
-  color: #357a14;
+  color: #66bf3c;
   font-weight: 700;
   font-size: 11px;
   line-height: 12px;

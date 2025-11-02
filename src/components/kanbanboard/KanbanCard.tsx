@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { KanbanTask } from "./KanbanBoard.types";
 
 interface KanbanCardProps {
   task: KanbanTask;
   onClick?: (task: KanbanTask) => void;
+  draggable?: boolean;
+  onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-const KanbanCard: React.FC<KanbanCardProps> = ({ task, onClick }) => {
+const KanbanCard: React.FC<KanbanCardProps> = ({
+  task,
+  onClick,
+  draggable = false,
+  onDragStart,
+  onDragEnd,
+}) => {
+  const [isDragging, setIsDragging] = useState(false);
+
   // Priority color mapping
   const priorityColors: Record<string, string> = {
     urgent: "border-red-500",
@@ -17,10 +28,26 @@ const KanbanCard: React.FC<KanbanCardProps> = ({ task, onClick }) => {
 
   const priorityClass = priorityColors[task.priority || "low"];
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    onDragStart?.(e);
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    setIsDragging(false);
+    onDragEnd?.(e);
+  };
+
   return (
     <div
-      className={`bg-white shadow-md rounded-lg p-3 mb-2 cursor-pointer hover:shadow-lg transition border-l-4 ${priorityClass}`}
+      draggable={draggable}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       onClick={() => onClick?.(task)}
+      className={`bg-white rounded-lg p-3 mb-2 cursor-pointer border-l-4 transition 
+        ${priorityClass} 
+        ${isDragging ? "opacity-50 scale-95" : "hover:shadow-lg shadow-md"}
+      `}
     >
       <h3 className="font-semibold text-gray-800">{task.title}</h3>
 
@@ -30,11 +57,7 @@ const KanbanCard: React.FC<KanbanCardProps> = ({ task, onClick }) => {
         </p>
       )}
 
-      <div className="mt-2 flex justify-end items-center">
-        <span className="text-xs text-gray-400">
-          {new Date(task.createdAt).toLocaleDateString()}
-        </span>
-      </div>
+   
     </div>
   );
 };

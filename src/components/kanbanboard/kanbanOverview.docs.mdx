@@ -1,0 +1,25 @@
+import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';
+import { KanbanBoard } from './KanbanBoard';
+import * as KanbanBoardStories from './KanbanBoard.stories';
+
+<Meta title="Components/KanbanBoard/Overview" component={KanbanBoard} />
+
+# 🧭 Kanban Board Overview
+
+A visual and interactive Kanban system for managing tasks by columns and priorities.
+
+---
+
+## 📋 Example
+
+<Canvas>
+  <Story name="Default" args={KanbanBoardStories.Default.args}>
+    <KanbanBoard {...KanbanBoardStories.Default.args} />
+  </Story>
+</Canvas>
+
+---
+
+## ⚙️ Props
+
+<ArgsTable of={KanbanBoard} />
