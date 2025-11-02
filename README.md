@@ -10,10 +10,8 @@ A modern, responsive **Kanban Board** built with **React**, **TypeScript**, **Ta
 
 - **Drag-and-drop tasks** between columns  
 - **Task creation and editing** with real-time updates  
-- **Responsive layout** using TailwindCSS  
-- **Accessible controls** with keyboard support  
+- **Responsive layout** using TailwindCSS   
 - **Interactive documentation** via Storybook Docs & MDX  
-- **Scalable architecture** for future extensions (notes, reminders, etc.)
 
 ---
 
